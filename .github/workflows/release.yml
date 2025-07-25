@@ -40,6 +40,13 @@ jobs:
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
           PASSPHRASE: ${{ secrets.PASSPHRASE }}
       -
+        name: Configure GPG for batch mode
+        run: |
+          echo 'use-agent' >> ~/.gnupg/gpg.conf
+          echo 'pinentry-mode loopback' >> ~/.gnupg/gpg.conf
+          echo 'allow-loopback-pinentry' >> ~/.gnupg/gpg-agent.conf
+          gpg-connect-agent reloadagent /bye
+      -
         name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v6
         with:
