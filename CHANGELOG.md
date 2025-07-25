@@ -1,5 +1,9 @@
 # Changelog
 
+## [v2.10.1](https://github.com/infobloxopen/terraform-provider-infoblox/tree/v2.10.1) (2025-07-25)
+### Bug Fixes
+- Added `allocated_ipv4_addr` computed field to `infoblox_ipv4_fixed_address` resource to support plan-time dependencies when using dynamic IP allocation from network blocks
+
 ## [v2.10.0](https://github.com/infobloxopen/terraform-provider-infoblox/tree/v2.10.0) (2025-4-25)
 - New Resources:
   - infoblox_alias_record

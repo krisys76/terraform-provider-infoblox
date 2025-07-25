@@ -79,6 +79,11 @@ func resourceFixedRecord() *schema.Resource {
 					return false
 				},
 			},
+			"allocated_ipv4_addr": {
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The allocated IPv4 address (from ipv4addr if specified, or dynamically allocated from network).",
+			},
 			"mac": {
 				Type:        schema.TypeString,
 				Optional:    true,
@@ -296,6 +301,9 @@ func resourceFixedRecordCreate(d *schema.ResourceData, m interface{}) error {
 	if err = d.Set("ref", fixedAddress.Ref); err != nil {
 		return err
 	}
+	if err = d.Set("allocated_ipv4_addr", fixedAddress.IPv4Address); err != nil {
+		return err
+	}
 	return resourceFixedRecordRead(d, m)
 }
 func resourceFixedRecordRead(d *schema.ResourceData, m interface{}) error {
@@ -344,6 +352,9 @@ func resourceFixedRecordRead(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 	if err = d.Set("ipv4addr", fixedAddress.IPv4Address); err != nil {
+		return err
+	}
+	if err = d.Set("allocated_ipv4_addr", fixedAddress.IPv4Address); err != nil {
 		return err
 	}
 	if fixedAddress.MatchClient != nil && (*fixedAddress.MatchClient == "MAC_ADDRESS" || *fixedAddress.MatchClient == "RESERVED") {
@@ -550,6 +561,9 @@ func resourceFixedRecordUpdate(d *schema.ResourceData, m interface{}) error {
 	if err = d.Set("internal_id", newInternalId.String()); err != nil {
 		return err
 	}
+	if err = d.Set("allocated_ipv4_addr", fixedAddress.IPv4Address); err != nil {
+		return err
+	}
 	return resourceFixedRecordRead(d, m)
 }
 func resourceFixedRecordDelete(d *schema.ResourceData, m interface{}) error {
@@ -629,6 +643,9 @@ func resourceFixedRecordImport(d *schema.ResourceData, m interface{}) ([]*schema
 		}
 	}
 	if err = d.Set("ipv4addr", obj.IPv4Address); err != nil {
+		return nil, err
+	}
+	if err = d.Set("allocated_ipv4_addr", obj.IPv4Address); err != nil {
 		return nil, err
 	}
 	if err = d.Set("mac", obj.Mac); err != nil {
